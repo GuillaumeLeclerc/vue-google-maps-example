@@ -1,5 +1,5 @@
 {
-  "name": "vue-google-maps example",
+  "name": "vue-google-maps-examples",
   "version": "2.0.0",
   "description": "Simple example of the usage of vue-google-maps",
   "main": "index.js",
@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "vue": "^1.0.0",
-    "vue-google-maps": "0.0.2"
+    "vue-google-maps": "0.0.3"
   },
   "devDependencies": {
     "babel-core": "^6.1.2",
