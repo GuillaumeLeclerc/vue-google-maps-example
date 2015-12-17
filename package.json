@@ -1,7 +1,7 @@
 {
-  "name": "vue-loader-example",
+  "name": "vue-google-maps example",
   "version": "2.0.0",
-  "description": "Example using Webpack with vue-loader",
+  "description": "Simple example of the usage of vue-google-maps",
   "main": "index.js",
   "scripts": {
     "dev": "webpack-dev-server --inline --hot --quiet",
@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "vue": "^1.0.0",
-    "vue-google-maps": "0.0.1"
+    "vue-google-maps": "0.0.2"
   },
   "devDependencies": {
     "babel-core": "^6.1.2",

@@ -16,6 +16,12 @@
   </select>
   <br>
   <button @click="addMarker"> Add a new Marker</button>
+  <h1>Clusters</h1>
+  enabled: <input type="checkbox" v-model="clustering" number>
+  </br>
+  Grid size: <input type="number" v-model="gridSize" number>
+  <br>
+
   <h1>Markers</h1>
   <table>
     <tr>
@@ -54,15 +60,31 @@
     :zoom.sync="zoom"
     :map-type-id.sync="mapType"
     >
-    <marker
-    v-if="m.enabled"
-    :position.sync="m.position"
-    :opacity="m.opacity"
-    :draggable.sync="m.draggable"
-    @click="m.clicked++"
-    @rightclick="m.rightClicked++"
-    v-for="m in markers"
-    ></marker>
+    <cluster
+      :grid-size="gridSize"
+      v-if="clustering"
+    >
+      <marker
+        v-if="m.enabled"
+        :position.sync="m.position"
+        :opacity="m.opacity"
+        :draggable.sync="m.draggable"
+        @click="m.clicked++"
+        @rightclick="m.rightClicked++"
+        v-for="m in markers"
+      ></marker>
+    </cluster>
+    <div v-if="!clustering">
+      <marker
+        v-if="m.enabled"
+        :position.sync="m.position"
+        :opacity="m.opacity"
+        :draggable.sync="m.draggable"
+        @click="m.clicked++"
+        @rightclick="m.rightClicked++"
+        v-for="m in markers"
+      ></marker>
+    </div>
   </map>
 
 </div>
@@ -70,17 +92,17 @@
 
 <script>
 
-import {load, Marker, Map} from 'vue-google-maps'
+import {load, Marker, Map, Cluster} from 'vue-google-maps'
 
 load('AIzaSyBzlLYISGjL_ovJwAehh6ydhB56fCCpPQw');
-console.log(load);
-
 
 export default {
   data: function data() {
     return {
       center: { lat: 48.8538302, lng: 2.2982161 },
+      clustering: true,
       zoom: 7,
+      gridSize: 50,
       mapType: 'terrain',
       markers: []
     };
@@ -100,7 +122,8 @@ export default {
   },
   components: {
     Map,
-    Marker
+    Marker,
+    Cluster
   }
 };
 </script>
