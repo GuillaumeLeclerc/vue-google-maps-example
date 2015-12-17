@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "vue": "^1.0.0",
-    "vue-google-maps": "0.0.4"
+    "vue-google-maps": "0.0.5"
   },
   "devDependencies": {
     "babel-core": "^6.1.2",

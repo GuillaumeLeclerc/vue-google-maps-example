@@ -26,6 +26,9 @@
   Grid size: <input type="number" v-model="gridSize" number>
   <br>
 
+  <h1> Standalone infoWindow </h1>
+  modal 1 : <input type="checkbox" number v-model="ifw"><br>
+  modal 2: <input type="checkbox" number v-model="ifw2"> <input type="text" v-model="ifw2text">
   <h1>Markers</h1>
   <table>
     <tr>
@@ -92,6 +95,22 @@
         v-for="m in markers"
       ></marker>
     </div>
+
+    <info-window
+      :position="center"
+      :opened.sync="ifw"
+    >
+      To show you the bindings are working I will stay on the center of the screen whatever you do :) 
+      <br/>
+      To show you that even my content is bound to vue here is the number of time you clicked on the map 
+      <b>{{mapClickedCount}}</b>
+    </info-window>
+
+    <info-window
+      :position="center"
+      :opened.sync="ifw2"
+      :content="ifw2text"
+    ></info-window>
   </map>
 
 </div>
@@ -99,7 +118,7 @@
 
 <script>
 
-import {load, Marker, Map, Cluster} from 'vue-google-maps'
+import {load, Marker, Map, Cluster, InfoWindow} from 'vue-google-maps'
 
 load('AIzaSyBzlLYISGjL_ovJwAehh6ydhB56fCCpPQw');
 
@@ -113,7 +132,11 @@ export default {
       mapType: 'terrain',
       markers: [],
       drag: 0,
-      mapClickedCount: 0
+      mapClickedCount: 0,
+      ifw: true,
+      ifw2: false,
+      ifw2text: 'You can also use the content prop to set your modal'
+
     };
   },
 
@@ -133,7 +156,7 @@ export default {
         draggable: true,
         enabled: true,
         clicked: 0,
-        rightClicked: 0
+        rightClicked: 0,
       });
       return this.markers[this.markers.length - 1];
     }
@@ -141,7 +164,8 @@ export default {
   components: {
     Map,
     Marker,
-    Cluster
+    Cluster,
+    InfoWindow
   }
 };
 </script>
