@@ -8,6 +8,10 @@
   <br>
   Map zoom: <input type="number" v-model="zoom" number>
   <br>
+  Dragged {{drag}} times
+  <br>
+  Left clicked {{mapClickedCount}} times
+  <br>
   Map type: <select id="" name="" v-model="mapType">
     <option value="roadmap">roadmap</option>
     <option value="hybrid">hybrid</option>
@@ -15,7 +19,7 @@
     <option value="terrain">terrain</option>
   </select>
   <br>
-  <button @click="addMarker"> Add a new Marker</button>
+  <button @click="addMarker"> Add a new Marker</button> (or right click on the map :) )
   <h1>Clusters</h1>
   enabled: <input type="checkbox" v-model="clustering" number>
   </br>
@@ -59,6 +63,9 @@
     :center.sync="center"
     :zoom.sync="zoom"
     :map-type-id.sync="mapType"
+    @g-rightclick="mapRclicked"
+    @g-drag="drag++"
+    @g-click="mapClickedCount++"
     >
     <cluster
       :grid-size="gridSize"
@@ -69,8 +76,8 @@
         :position.sync="m.position"
         :opacity="m.opacity"
         :draggable.sync="m.draggable"
-        @click="m.clicked++"
-        @rightclick="m.rightClicked++"
+        @g-click="m.clicked++"
+        @g-rightclick="m.rightClicked++"
         v-for="m in markers"
       ></marker>
     </cluster>
@@ -80,8 +87,8 @@
         :position.sync="m.position"
         :opacity="m.opacity"
         :draggable.sync="m.draggable"
-        @click="m.clicked++"
-        @rightclick="m.rightClicked++"
+        @g-click="m.clicked++"
+        @g-rightclick="m.rightClicked++"
         v-for="m in markers"
       ></marker>
     </div>
@@ -104,11 +111,21 @@ export default {
       zoom: 7,
       gridSize: 50,
       mapType: 'terrain',
-      markers: []
+      markers: [],
+      drag: 0,
+      mapClickedCount: 0
     };
   },
 
   methods: {
+    mapClicked (mouseArgs) {
+      console.log('map clicked', mouseArgs);
+    },
+    mapRclicked (mouseArgs) {
+      const createdMarker = this.addMarker();
+      createdMarker.position.lat = mouseArgs.latLng.lat();
+      createdMarker.position.lng = mouseArgs.latLng.lng();
+    },
     addMarker: function addMarker() {
       this.markers.push({
         position: { lat: 48.8538302, lng: 2.2982161 },
@@ -118,6 +135,7 @@ export default {
         clicked: 0,
         rightClicked: 0
       });
+      return this.markers[this.markers.length - 1];
     }
   },
   components: {
