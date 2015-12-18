@@ -39,6 +39,8 @@
       <th>draggable</th>
       <th>clicked</th>
       <th>right clicked</th>
+      <th>Open info window</th>
+      <th>infoWIndow text</th>
       <th>Delete me</th>
     </tr>
     <tr v-for="m in markers">
@@ -59,6 +61,12 @@
       </td>
       <td>{{m.clicked}}</td>
       <td>{{m.rightClicked}}</td>
+      <td>
+        <input type="checkbox" v-model="m.ifw" number>
+      </td>
+      <td>
+        <input type="text" v-model="m.ifw2text">
+      </td>
       <td><button @click="markers.splice($index, 1)">Delete me </button></td>
     </tr>
   </table>
@@ -82,7 +90,12 @@
         @g-click="m.clicked++"
         @g-rightclick="m.rightClicked++"
         v-for="m in markers"
-      ></marker>
+      >
+        <info-window
+          :opened.sync="m.ifw"
+          :content="m.ifw2text"
+        ></info-window>
+      </marker>
     </cluster>
     <div v-if="!clustering">
       <marker
@@ -93,7 +106,12 @@
         @g-click="m.clicked++"
         @g-rightclick="m.rightClicked++"
         v-for="m in markers"
-      ></marker>
+      >
+        <info-window
+          :opened.sync="m.ifw"
+          :content="m.ifw2text"
+        ></info-window>
+      </marker>
     </div>
 
     <info-window
@@ -157,6 +175,8 @@ export default {
         enabled: true,
         clicked: 0,
         rightClicked: 0,
+        ifw: true,
+        ifw2text: "This text is bad please change me :( "
       });
       return this.markers[this.markers.length - 1];
     }
