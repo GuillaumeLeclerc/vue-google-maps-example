@@ -19,6 +19,12 @@
     <option value="terrain">terrain</option>
   </select>
   <br>
+  Map style: <select id="" name="" v-model="mapStyle">
+    <option value="red">red</option>
+    <option value="green">green</option>
+    <option value="normal">normal</option>
+  </select>
+  <br>
   <button @click="addMarker"> Add a new Marker</button> (or right click on the map :) )
   <h1>Clusters</h1>
   enabled: <input type="checkbox" v-model="clustering" number>
@@ -74,60 +80,61 @@
     :center.sync="center"
     :zoom.sync="zoom"
     :map-type-id.sync="mapType"
+    :options="mapOptions"
     @g-rightclick="mapRclicked"
     @g-drag="drag++"
     @g-click="mapClickedCount++"
     >
     <cluster
-      :grid-size="gridSize"
-      v-if="clustering"
+    :grid-size="gridSize"
+    v-if="clustering"
     >
-      <marker
-        v-if="m.enabled"
-        :position.sync="m.position"
-        :opacity="m.opacity"
-        :draggable.sync="m.draggable"
-        @g-click="m.clicked++"
-        @g-rightclick="m.rightClicked++"
-        v-for="m in markers"
-      >
-        <info-window
-          :opened.sync="m.ifw"
-          :content="m.ifw2text"
-        ></info-window>
-      </marker>
+    <marker
+    v-if="m.enabled"
+    :position.sync="m.position"
+    :opacity="m.opacity"
+    :draggable.sync="m.draggable"
+    @g-click="m.clicked++"
+    @g-rightclick="m.rightClicked++"
+    v-for="m in markers"
+    >
+    <info-window
+    :opened.sync="m.ifw"
+    :content="m.ifw2text"
+    ></info-window>
+    </marker>
     </cluster>
     <div v-if="!clustering">
       <marker
-        v-if="m.enabled"
-        :position.sync="m.position"
-        :opacity="m.opacity"
-        :draggable.sync="m.draggable"
-        @g-click="m.clicked++"
-        @g-rightclick="m.rightClicked++"
-        v-for="m in markers"
+      v-if="m.enabled"
+      :position.sync="m.position"
+      :opacity="m.opacity"
+      :draggable.sync="m.draggable"
+      @g-click="m.clicked++"
+      @g-rightclick="m.rightClicked++"
+      v-for="m in markers"
       >
-        <info-window
-          :opened.sync="m.ifw"
-          :content="m.ifw2text"
-        ></info-window>
+      <info-window
+      :opened.sync="m.ifw"
+      :content="m.ifw2text"
+      ></info-window>
       </marker>
     </div>
 
     <info-window
-      :position="center"
-      :opened.sync="ifw"
+    :position="center"
+    :opened.sync="ifw"
     >
-      To show you the bindings are working I will stay on the center of the screen whatever you do :) 
-      <br/>
-      To show you that even my content is bound to vue here is the number of time you clicked on the map 
-      <b>{{mapClickedCount}}</b>
+    To show you the bindings are working I will stay on the center of the screen whatever you do :) 
+    <br/>
+    To show you that even my content is bound to vue here is the number of time you clicked on the map 
+    <b>{{mapClickedCount}}</b>
     </info-window>
 
     <info-window
-      :position="center"
-      :opened.sync="ifw2"
-      :content="ifw2text"
+    :position="center"
+    :opened.sync="ifw2"
+    :content="ifw2text"
     ></info-window>
   </map>
 
@@ -153,9 +160,63 @@ export default {
       mapClickedCount: 0,
       ifw: true,
       ifw2: false,
-      ifw2text: 'You can also use the content prop to set your modal'
+      ifw2text: 'You can also use the content prop to set your modal',
+      mapStyle: 'green'
 
     };
+  },
+
+  computed: {
+    mapOptions () {
+      switch(this.mapStyle) {
+        case 'normal':
+          return {styles: []};
+          break;
+        case 'red':
+          return {
+            styles: [
+              {
+                stylers: [
+                  {hue: '#890000'},
+                  {visibility: 'simplified'},
+                  {gamma: 0.5},
+                  {weight: 0.5}
+                ]
+              },
+              {
+                elementType: 'labels',
+                stylers: [{visibility: 'off'}]
+              },
+              {
+                featureType: 'water',
+                stylers: [{color: '#890000'}]
+              }
+            ]
+          }
+          break;
+        default:
+          return {
+            styles: [
+              {
+                stylers: [
+                  {hue: '#008989'},
+                  {visibility: 'simplified'},
+                  {gamma: 0.5},
+                  {weight: 0.5}
+                ]
+              },
+              {
+                elementType: 'labels',
+                stylers: [{visibility: 'off'}]
+              },
+              {
+                featureType: 'water',
+                stylers: [{color: '#008989'}]
+              }
+            ]
+          };
+      }
+    }
   },
 
   methods: {
@@ -190,10 +251,10 @@ export default {
 };
 </script>
 
- <style>
-   map {
-     width:100%;
-     height: 600px;
-     display: block;
-   }
- </style>
+<style>
+map {
+  width:100%;
+  height: 600px;
+  display: block;
+}
+</style>
