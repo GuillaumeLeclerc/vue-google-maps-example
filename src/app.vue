@@ -31,7 +31,11 @@
   </br>
   Grid size: <input type="number" v-model="gridSize" number>
   <br>
-
+  <h1>Polyline</h1>
+  Editable: <input type="checkbox" number v-model="pleditable">
+  <button @click="resetPlPath">Reset path</button>
+  <br>
+  {{plPath | json}}
   <h1> Standalone infoWindow </h1>
   modal 1 : <input type="checkbox" number v-model="ifw"><br>
   modal 2: <input type="checkbox" number v-model="ifw2"> <input type="text" v-model="ifw2text">
@@ -136,6 +140,9 @@
     :opened.sync="ifw2"
     :content="ifw2text"
     ></info-window>
+
+    <polyline :path.sync="plPath" :editable="pleditable" :draggable="true" :geodesic="true">
+    </polyline
   </map>
 
 </div>
@@ -143,7 +150,7 @@
 
 <script>
 
-import {load, Marker, Map, Cluster, InfoWindow} from 'vue-google-maps'
+import {load, Marker, Map, Cluster, InfoWindow, Polyline} from 'vue-google-maps'
 
 load('AIzaSyBzlLYISGjL_ovJwAehh6ydhB56fCCpPQw');
 
@@ -161,8 +168,20 @@ export default {
       ifw: true,
       ifw2: false,
       ifw2text: 'You can also use the content prop to set your modal',
-      mapStyle: 'green'
-
+      mapStyle: 'green',
+      originalPlPath: [
+        {lat: 37.772, lng: -122.214},
+        {lat: 21.291, lng: -157.821},
+        {lat: -18.142, lng: 178.431},
+        {lat: -27.467, lng: 153.027}
+      ],
+      plPath: [
+        {lat: 37.772, lng: -122.214},
+        {lat: 21.291, lng: -157.821},
+        {lat: -18.142, lng: 178.431},
+        {lat: -27.467, lng: 153.027}
+      ],
+      pleditable: true
     };
   },
 
@@ -199,19 +218,38 @@ export default {
             styles: [
               {
                 stylers: [
-                  {hue: '#008989'},
-                  {visibility: 'simplified'},
+                  {hue: '#899999'},
+                  {visibility: 'on'},
                   {gamma: 0.5},
                   {weight: 0.5}
                 ]
               },
               {
-                elementType: 'labels',
-                stylers: [{visibility: 'off'}]
+                featureType: 'road',
+                stylers: [
+                  {visibility: 'off'}
+                ]
+              },
+              {
+                featureType: 'transit.line',
+                stylers: [
+                  {color: '#FF0000'}
+                ]
+              },
+              {
+                featureType: 'poi',
+                elementType: 'labels.icon',
+                stylers: [
+                  {visibility: 'on'},
+                  {weight: 10}
+                ]
               },
               {
                 featureType: 'water',
-                stylers: [{color: '#008989'}]
+                stylers: [
+                  { color: '#8900FF' },
+                  { weight:  9999900000},
+                ]
               }
             ]
           };
@@ -240,13 +278,17 @@ export default {
         ifw2text: "This text is bad please change me :( "
       });
       return this.markers[this.markers.length - 1];
+    },
+    resetPlPath () {
+      this.plPath = this.originalPlPath;
     }
   },
   components: {
     Map,
     Marker,
     Cluster,
-    InfoWindow
+    InfoWindow,
+    Polyline
   }
 };
 </script>
