@@ -35,7 +35,14 @@
   Editable: <input type="checkbox" number v-model="pleditable">
   <button @click="resetPlPath">Reset path</button>
   <br>
-  {{plPath | json}}
+  <h1>Circle</h1>
+  Visible: <input type="checkbox" number v-model="displayCircle"><br>
+  {{circleBounds | json}}
+  <br>
+  <h1>Rectangle</h1>
+  Visible: <input type="checkbox" number v-model="displayRectangle"><br>
+  {{rectangleBounds | json}}
+  <br>
   <h1> Standalone infoWindow </h1>
   modal 1 : <input type="checkbox" number v-model="ifw"><br>
   modal 2: <input type="checkbox" number v-model="ifw2"> <input type="text" v-model="ifw2text">
@@ -142,7 +149,9 @@
     ></info-window>
 
     <polyline :path.sync="plPath" :editable="pleditable" :draggable="true" :geodesic="true">
-    </polyline
+    </polyline>
+    <circle v-if="displayCircle" :bounds.sync="circleBounds" :center.sync="center" :radius.sync="100000" :options="{editable: true}"></circle>
+    <rectangle v-if="displayRectangle" :bounds.sync="rectangleBounds"  :options="{editable: true}"></rectangle>
   </map>
 
 </div>
@@ -150,7 +159,7 @@
 
 <script>
 
-import {load, Marker, Map, Cluster, InfoWindow, Polyline} from 'vue-google-maps'
+import {load, Marker, Map, Cluster, InfoWindow, Polyline, Rectangle, Circle} from 'vue-google-maps'
 
 load('AIzaSyBzlLYISGjL_ovJwAehh6ydhB56fCCpPQw');
 
@@ -169,6 +178,15 @@ export default {
       ifw2: false,
       ifw2text: 'You can also use the content prop to set your modal',
       mapStyle: 'green',
+      circleBounds: {},
+      displayCircle: false,
+      displayRectangle: false,
+      rectangleBounds: {
+        north: 33.685,
+        south: 50.671,
+        east: -70.234,
+        west: -116.251
+      },
       originalPlPath: [
         {lat: 37.772, lng: -122.214},
         {lat: 21.291, lng: -157.821},
@@ -288,7 +306,9 @@ export default {
     Marker,
     Cluster,
     InfoWindow,
-    Polyline
+    Polyline,
+    Rectangle,
+    Circle
   }
 };
 </script>
