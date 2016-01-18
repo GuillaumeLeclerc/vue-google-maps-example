@@ -6,6 +6,8 @@
   <br>
   Map center longitude: <input type="number" v-model="center.lng" number>
   <br>
+  Map bounds: {{mapBounds | json}}
+  <br>
   Map zoom: <input type="number" v-model="zoom" number>
   <br>
   Dragged {{drag}} times
@@ -35,6 +37,8 @@
   Editable: <input type="checkbox" number v-model="pleditable">
   <button @click="resetPlPath">Reset path</button>
   <br>
+  Visible: <input type="checkbox" number v-model="plvisible">
+  <br>
   <h1>Circle</h1>
   Visible: <input type="checkbox" number v-model="displayCircle"><br>
   {{circleBounds | json}}
@@ -47,6 +51,7 @@
   modal 1 : <input type="checkbox" number v-model="ifw"><br>
   modal 2: <input type="checkbox" number v-model="ifw2"> <input type="text" v-model="ifw2text">
   <h1>Markers</h1>
+  Display only markers with even ID (to test filters) <input type="checkbox" number v-model="markersEven"><br>
   <table>
     <tr>
       <th>lat</th>
@@ -92,6 +97,7 @@
     :zoom.sync="zoom"
     :map-type-id.sync="mapType"
     :options="mapOptions"
+    :bounds.sync="mapBounds"
     @g-rightclick="mapRclicked"
     @g-drag="drag++"
     @g-click="mapClickedCount++"
@@ -107,7 +113,7 @@
     :draggable.sync="m.draggable"
     @g-click="m.clicked++"
     @g-rightclick="m.rightClicked++"
-    v-for="m in markers"
+    v-for="m in markers | markerRemover"
     >
     <info-window
     :opened.sync="m.ifw"
@@ -123,7 +129,7 @@
       :draggable.sync="m.draggable"
       @g-click="m.clicked++"
       @g-rightclick="m.rightClicked++"
-      v-for="m in markers"
+      v-for="m in markers | markerRemover"
       >
       <info-window
       :opened.sync="m.ifw"
@@ -148,7 +154,7 @@
     :content="ifw2text"
     ></info-window>
 
-    <polyline :path.sync="plPath" :editable="pleditable" :draggable="true" :geodesic="true">
+    <polyline v-if="plvisible" :path.sync="plPath" :editable="pleditable" :draggable="true" :options="{geodesic:true, strokeColor:'#FF0000'}">
     </polyline>
     <circle v-if="displayCircle" :bounds.sync="circleBounds" :center.sync="center" :radius.sync="100000" :options="{editable: true}"></circle>
     <rectangle v-if="displayRectangle" :bounds.sync="rectangleBounds"  :options="{editable: true}"></rectangle>
@@ -167,11 +173,13 @@ export default {
   data: function data() {
     return {
       center: { lat: 48.8538302, lng: 2.2982161 },
+      mapBounds: {},
       clustering: true,
       zoom: 7,
       gridSize: 50,
       mapType: 'terrain',
       markers: [],
+      markersEven: false,
       drag: 0,
       mapClickedCount: 0,
       ifw: true,
@@ -199,8 +207,23 @@ export default {
         {lat: -18.142, lng: 178.431},
         {lat: -27.467, lng: 153.027}
       ],
-      pleditable: true
+      pleditable: true,
+      plvisible: false
     };
+  },
+
+  filters: {
+    markerRemover (markers) {
+      if (this.markersEven) {
+        const result = [];
+        for (var i = 0 ; i < markers.length; i+=2) {
+          result.push(markers[i]);
+        }
+        return result;
+      } else {
+        return markers
+      }
+    }
   },
 
   computed: {
