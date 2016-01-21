@@ -61,6 +61,7 @@
       <th>draggable</th>
       <th>clicked</th>
       <th>right clicked</th>
+      <th>Drag-ended</th>
       <th>Open info window</th>
       <th>infoWIndow text</th>
       <th>Delete me</th>
@@ -83,6 +84,7 @@
       </td>
       <td>{{m.clicked}}</td>
       <td>{{m.rightClicked}}</td>
+      <td>{{m.dragended}}</td>
       <td>
         <input type="checkbox" v-model="m.ifw" number>
       </td>
@@ -113,6 +115,7 @@
     :draggable.sync="m.draggable"
     @g-click="m.clicked++"
     @g-rightclick="m.rightClicked++"
+    @g-dragend="m.dragended++"
     v-for="m in markers | markerRemover"
     >
     <info-window
@@ -129,6 +132,7 @@
       :draggable.sync="m.draggable"
       @g-click="m.clicked++"
       @g-rightclick="m.rightClicked++"
+      @g-dragend="m.dragended++"
       v-for="m in markers | markerRemover"
       >
       <info-window
@@ -315,6 +319,7 @@ export default {
         enabled: true,
         clicked: 0,
         rightClicked: 0,
+        dragended: 0,
         ifw: true,
         ifw2text: "This text is bad please change me :( "
       });
