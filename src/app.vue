@@ -171,7 +171,7 @@
 
 import {load, Marker, Map, Cluster, InfoWindow, Polyline, Rectangle, Circle} from 'vue-google-maps'
 
-load('AIzaSyBzlLYISGjL_ovJwAehh6ydhB56fCCpPQw');
+load('AIzaSyBzlLYISGjL_ovJwAehh6ydhB56fCCpPQw', '3.23');
 
 export default {
   data: function data() {
