@@ -39,6 +39,9 @@
   <br>
   Visible: <input type="checkbox" number v-model="plvisible">
   <br>
+  <h1>Polygon</h1>
+  Visible: <input type="checkbox" number v-model="pgvisible">
+  <br>
   <h1>Circle</h1>
   Visible: <input type="checkbox" number v-model="displayCircle"><br>
   {{circleBounds | json}}
@@ -160,6 +163,8 @@
 
     <polyline v-if="plvisible" :path.sync="plPath" :editable="pleditable" :draggable="true" :options="{geodesic:true, strokeColor:'#FF0000'}">
     </polyline>
+    <polygon v-if="pgvisible" :path="originalPlPath" :options="{geodesic:true, strokeColor:'#FF0000', fillColor:'#000000'}">
+    </polygon>
     <circle v-if="displayCircle" :bounds.sync="circleBounds" :center.sync="center" :radius.sync="100000" :options="{editable: true}"></circle>
     <rectangle v-if="displayRectangle" :bounds.sync="rectangleBounds"  :options="{editable: true}"></rectangle>
   </map>
@@ -169,7 +174,7 @@
 
 <script>
 
-import {load, Marker, Map, Cluster, InfoWindow, Polyline, Rectangle, Circle} from 'vue-google-maps'
+import {load, Marker, Map, Cluster, InfoWindow, Polyline, Rectangle, Circle, Polygon} from 'vue-google-maps'
 
 load('AIzaSyBzlLYISGjL_ovJwAehh6ydhB56fCCpPQw', '3.23');
 
@@ -212,7 +217,8 @@ export default {
         {lat: -27.467, lng: 153.027}
       ],
       pleditable: true,
-      plvisible: false
+      plvisible: false,
+      pgvisible: false
     };
   },
 
@@ -334,6 +340,7 @@ export default {
     Marker,
     Cluster,
     InfoWindow,
+    Polygon,
     Polyline,
     Rectangle,
     Circle
