@@ -40,7 +40,8 @@
   Visible: <input type="checkbox" number v-model="plvisible">
   <br>
   <h1>Polygon</h1>
-  Visible: <input type="checkbox" number v-model="pgvisible">
+  Visible: <input type="checkbox" number v-model="pgvisible"> <br>
+  Path: {{pgPath | json}}
   <br>
   <h1>Circle</h1>
   Visible: <input type="checkbox" number v-model="displayCircle"><br>
@@ -163,7 +164,7 @@
 
     <polyline v-if="plvisible" :path.sync="plPath" :editable="pleditable" :draggable="true" :options="{geodesic:true, strokeColor:'#FF0000'}">
     </polyline>
-    <polygon v-if="pgvisible" :path="originalPlPath" :options="{geodesic:true, strokeColor:'#FF0000', fillColor:'#000000'}">
+    <polygon v-if="pgvisible" :paths.sync="pgPath" :editable="true" :options="{geodesic:true, strokeColor:'#FF0000', fillColor:'#000000'}">
     </polygon>
     <circle v-if="displayCircle" :bounds.sync="circleBounds" :center.sync="center" :radius.sync="100000" :options="{editable: true}"></circle>
     <rectangle v-if="displayRectangle" :bounds.sync="rectangleBounds"  :options="{editable: true}"></rectangle>
@@ -174,7 +175,7 @@
 
 <script>
 
-import {load, Marker, Map, Cluster, InfoWindow, Polyline, Rectangle, Circle, Polygon} from 'vue-google-maps'
+import {load, Marker, Map, Cluster, InfoWindow, Polyline, Rectangle, Circle, Polygon} from '../../vue-google-maps/src/main.js'
 
 load('AIzaSyBzlLYISGjL_ovJwAehh6ydhB56fCCpPQw', '3.23');
 
@@ -218,7 +219,20 @@ export default {
       ],
       pleditable: true,
       plvisible: false,
-      pgvisible: false
+      pgvisible: false,
+      pgPath: [[
+          {lat: 38.872886, lng:-77.054720},
+          {lat: 38.872602, lng:-77.058046},
+          {lat: 38.870080, lng:-77.058604},
+          {lat: 38.868894, lng:-77.055664},
+          {lat: 38.870598, lng:-77.053346}
+        ], [
+          {lat: 38.871684, lng:-77.056780},
+          {lat: 38.871867, lng:-77.055449},
+          {lat: 38.870915, lng:-77.054891},
+          {lat: 38.870113, lng:-77.055836},
+          {lat: 38.870581, lng:-77.057037}
+        ]],
     };
   },
 
