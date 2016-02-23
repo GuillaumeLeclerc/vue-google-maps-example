@@ -41,6 +41,8 @@
   <br>
   <h1>Polygon</h1>
   Visible: <input type="checkbox" number v-model="pgvisible"> <br>
+  <button @click="pgPath = opgPath">Reset Polygon to pentagon</button><br>
+  <button @click="pgPath = originalPlPath">Reset Polygon to a simple polygon</button><br>
   Path: {{pgPath | json}}
   <br>
   <h1>Circle</h1>
@@ -175,7 +177,7 @@
 
 <script>
 
-import {load, Marker, Map, Cluster, InfoWindow, Polyline, Rectangle, Circle, Polygon} from '../../vue-google-maps/src/main.js'
+import {load, Marker, Map, Cluster, InfoWindow, Polyline, Rectangle, Circle, Polygon} from 'vue-google-maps'
 
 load('AIzaSyBzlLYISGjL_ovJwAehh6ydhB56fCCpPQw', '3.23');
 
@@ -221,6 +223,19 @@ export default {
       plvisible: false,
       pgvisible: false,
       pgPath: [[
+          {lat: 38.872886, lng:-77.054720},
+          {lat: 38.872602, lng:-77.058046},
+          {lat: 38.870080, lng:-77.058604},
+          {lat: 38.868894, lng:-77.055664},
+          {lat: 38.870598, lng:-77.053346}
+        ], [
+          {lat: 38.871684, lng:-77.056780},
+          {lat: 38.871867, lng:-77.055449},
+          {lat: 38.870915, lng:-77.054891},
+          {lat: 38.870113, lng:-77.055836},
+          {lat: 38.870581, lng:-77.057037}
+        ]],
+      opgPath: [[
           {lat: 38.872886, lng:-77.054720},
           {lat: 38.872602, lng:-77.058046},
           {lat: 38.870080, lng:-77.058604},
