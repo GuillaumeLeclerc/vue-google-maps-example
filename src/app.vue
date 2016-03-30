@@ -53,6 +53,12 @@
   Visible: <input type="checkbox" number v-model="displayRectangle"><br>
   {{rectangleBounds | json}}
   <br>
+  <h1>PlaceInput</h1>
+  <place-input
+    label="Add a marker at this place"
+    :select-first-on-enter="true"
+  ></place-input>
+  <br>
   <h1> Standalone infoWindow </h1>
   modal 1 : <input type="checkbox" number v-model="ifw"><br>
   modal 2: <input type="checkbox" number v-model="ifw2"> <input type="text" v-model="ifw2text">
@@ -177,9 +183,9 @@
 
 <script>
 
-import {load, Marker, Map, Cluster, InfoWindow, Polyline, Rectangle, Circle, Polygon} from 'vue-google-maps'
+import {load, Marker, Map, Cluster, InfoWindow, Polyline, Rectangle, Circle, Polygon, PlaceInput} from 'vue-google-maps'
 
-load('AIzaSyBzlLYISGjL_ovJwAehh6ydhB56fCCpPQw', '3.23');
+load('AIzaSyBzlLYISGjL_ovJwAehh6ydhB56fCCpPQw', '3.23', ['places']);
 
 export default {
   data: function data() {
@@ -372,7 +378,8 @@ export default {
     Polygon,
     Polyline,
     Rectangle,
-    Circle
+    Circle,
+    PlaceInput
   }
 };
 </script>
