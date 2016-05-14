@@ -27,6 +27,8 @@
     <option value="normal">normal</option>
   </select>
   <br>
+  Enable scrollwheel zooming on the map: <input type="checkbox" v-model="scrollwheel">
+  <br>
   <button @click="addMarker"> Add a new Marker</button> (or right click on the map :) )
   <h1>Clusters</h1>
   enabled: <input type="checkbox" v-model="clustering" number>
@@ -110,7 +112,7 @@
     :center.sync="center"
     :zoom.sync="zoom"
     :map-type-id.sync="mapType"
-    :options="mapOptions"
+    :options="{styles: mapStyles, scrollwheel: scrollwheel}"
     :bounds.sync="mapBounds"
     @g-rightclick="mapRclicked"
     @g-drag="drag++"
@@ -254,6 +256,7 @@ export default {
           {lat: 38.870113, lng:-77.055836},
           {lat: 38.870581, lng:-77.057037}
         ]],
+        scrollwheel: true
     };
   },
 
@@ -272,14 +275,13 @@ export default {
   },
 
   computed: {
-    mapOptions () {
+    mapStyles () {
       switch(this.mapStyle) {
         case 'normal':
-          return {styles: []};
+          return [];
           break;
         case 'red':
-          return {
-            styles: [
+          return [
               {
                 stylers: [
                   {hue: '#890000'},
@@ -297,11 +299,9 @@ export default {
                 stylers: [{color: '#890000'}]
               }
             ]
-          }
           break;
         default:
-          return {
-            styles: [
+          return [
               {
                 stylers: [
                   {hue: '#899999'},
@@ -337,8 +337,7 @@ export default {
                   { weight:  9999900000},
                 ]
               }
-            ]
-          };
+            ];
       }
     }
   },
